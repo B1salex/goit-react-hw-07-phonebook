@@ -4,9 +4,6 @@ import { filtersReducer } from './contacts/filterSlice';
 
 import { combineReducers } from '@reduxjs/toolkit';
 
-
-
-
 const rootReducer = combineReducers({
   contacts: contactsReducer,
   filter: filtersReducer,
@@ -15,3 +12,5 @@ const rootReducer = combineReducers({
 export const store = configureStore({
   reducer: rootReducer,
 });
+
+// check
