@@ -4,6 +4,7 @@ import { addContacts } from 'redux/contacts/operations';
 import { selectContacts } from 'redux/contacts/selectors';
 import { nanoid } from 'nanoid';
 import s from './ContactForm.module.css';
+import { Report } from 'notiflix/build/notiflix-report-aio';
 
 export default function ContactForm() {
   const contacts = useSelector(selectContacts);
@@ -30,11 +31,18 @@ export default function ContactForm() {
       number: number.value,
     };
 
-    if (contacts && contacts.length > 0) {
-      const getAllContactsNames = contacts.map(cont => cont.name);
-      if (getAllContactsNames.includes(resultName)) {
-        return alert(`${resultName} is already in contacts`);
-      }
+    const isExsistName = contacts.some(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    );
+    const isExsistNumber = contacts.some(contact => contact.number === number);
+
+    if (isExsistName) {
+      resetForm();
+      return Report.failure('', `${name} is already in contact`);
+    } else if (isExsistNumber) {
+      resetForm();
+      const { name } = contacts.find(contact => contact.number === number);
+      return Report.failure('', `${number} is already in contact as ${name}`);
     }
 
     dispatch(addContacts(newContact));
